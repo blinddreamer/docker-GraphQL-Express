@@ -1,25 +1,20 @@
-// index.js
+const express = require("express");
+const app = express();
+const PORT = 8080;
+const { graphqlHTTP } = require("express-graphql");
+const schema = require("./Schemas/index");
+const cors = require("cors");
 
-const express = require('express')
-const { graphqlHTTP } = require('express-graphql')
-const { buildSchema } = require('graphql')
-
-const schema = buildSchema(`type Query { hello: String }`)
-const rootValue = { hello: () => 'Hello from Express GraphQL!' }
-
-const app = express()
-
+app.use(cors());
+app.use(express.json());
 app.use(
-  '/graphql',
+  "/graphql",
   graphqlHTTP({
     schema,
-    rootValue,
-    graphiql: {
-      headerEditorEnabled: true
-    },
-  }),
-)
+    graphiql: true,
+  })
+);
 
-app.listen(8080, '0.0.0.0')
-
-console.log('Running Express GraphQL server at http://localhost:8080/graphql')
+app.listen(PORT, () => {
+  console.log("Server running on localhost:"+PORT+"/graphql");
+});
